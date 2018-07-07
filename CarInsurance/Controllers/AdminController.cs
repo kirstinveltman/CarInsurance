@@ -104,6 +104,7 @@ namespace CarInsurance.Controllers
             return View(insuree);
         }
 
+
         // POST: Admin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

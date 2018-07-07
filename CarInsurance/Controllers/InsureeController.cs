@@ -121,6 +121,71 @@ namespace CarInsurance.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Quote
+        public ActionResult GetQuote(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Insuree insuree = db.Insurees.Find(id);
+            if (insuree == null)
+            {
+                return HttpNotFound();
+            }
+            return View(insuree);
+        }
+
+        // POST: Quote
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Quote([Bind(Include = "Id,FirstName,LastName,EmailAddress,DateOfBirth,CarYear,CarMake,CarModel,DUI,SpeedingTickets,CoverageType,Quote")] Insuree insuree, DateTime dateOfBirth, int carYear, string carMake, string carModel, bool dUI, int speedingTicket, bool fullCoverage, decimal quote)
+        {
+            if (ModelState.IsValid)
+            {
+                decimal preQuote = 50.00m;
+
+                // Calculate amount to add to quote based on age
+                int age = 0;
+                age = DateTime.Now.Year - dateOfBirth.Year;
+                if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
+                    age = age - 1;
+
+                if (age < 18)
+                    preQuote += 100.00m;
+                if (age < 25 && age > 18)
+                    preQuote += 25.00m;
+                if (age > 100)
+                    preQuote += 25.00m;
+
+                // Calculate amount to add based on CarYear
+                if (carYear < 2000)
+                    preQuote += 25.00m;
+                if (carYear > 2015)
+                    preQuote += 25.00m;
+
+                // Add more money if it's a Porsche
+                if (carMake == "Porsche")
+                    preQuote += 25.00m;
+
+                // And even more money if it's a 911 Carrera
+                if (carModel == "911 Carrera")
+                    preQuote += 25.00m;
+
+
+
+                db.Entry(preQuote).State = EntityState.Modified;
+                db.SaveChanges();
+                return View("Success");
+            }
+
+            return View();
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
