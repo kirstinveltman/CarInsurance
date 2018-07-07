@@ -142,7 +142,7 @@ namespace CarInsurance.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Quote([Bind(Include = "Id,FirstName,LastName,EmailAddress,DateOfBirth,CarYear,CarMake,CarModel,DUI,SpeedingTickets,CoverageType,Quote")] Insuree insuree, DateTime dateOfBirth, int carYear, string carMake, string carModel, bool dUI, int speedingTicket, bool fullCoverage, decimal quote)
+        public ActionResult Quote([Bind(Include = "Id,DateOfBirth,CarYear,CarMake,CarModel,DUI,SpeedingTickets,CoverageType,Quote")] Insuree insuree, DateTime dateOfBirth, int carYear, string carMake, string carModel, bool dUI, int speedingTicket, bool fullCoverage, decimal quote)
         {
             if (ModelState.IsValid)
             {
@@ -175,9 +175,7 @@ namespace CarInsurance.Controllers
                 if (carModel == "911 Carrera")
                     preQuote += 25.00m;
 
-
-
-                db.Entry(preQuote).State = EntityState.Modified;
+                db.Entry(insuree).State = EntityState.Modified;
                 db.SaveChanges();
                 return View("Success");
             }
