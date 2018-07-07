@@ -20,6 +20,12 @@ namespace CarInsurance.Controllers
             return View(db.Insurees.ToList());
         }
 
+        // GET: Success
+        public ActionResult Success()
+        {
+            return View("~/Insuree/Success");
+        }
+
         // GET: Insuree/Details/5
         public ActionResult Details(int? id)
         {
@@ -52,7 +58,7 @@ namespace CarInsurance.Controllers
             {
                 db.Insurees.Add(insuree);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return View("Success");
             }
 
             return View(insuree);
