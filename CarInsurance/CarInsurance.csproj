@@ -152,10 +152,26 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsureeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Admin.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Admin.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Admin.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Admin.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Admin.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Admin.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\InsuranceEntities.Context.cs">
       <AutoGen>True</AutoGen>
@@ -173,7 +189,7 @@
       <DependentUpon>InsuranceEntities.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Insuree.cs">
-      <DependentUpon>InsuranceEntities.tt</DependentUpon>
+      <DependentUpon>Admin.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -191,6 +207,16 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\Admin.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Admin.edmx</DependentUpon>
+      <LastGenOutput>Admin.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Admin.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Admin.edmx</DependentUpon>
+      <LastGenOutput>Admin.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\InsuranceEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>InsuranceEntities.Context.cs</LastGenOutput>
@@ -233,6 +259,13 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <EntityDeploy Include="Models\Admin.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Admin.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Admin.edmx.diagram">
+      <DependentUpon>Admin.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />
@@ -285,6 +318,11 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Insuree\Success.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
