@@ -58,6 +58,70 @@ namespace CarInsurance.Controllers
             {
                 db.Insurees.Add(insuree);
                 db.SaveChanges();
+
+                // db.Entry(insuree).GetDatabaseValues(); - may not be needed
+
+                int id = insuree.Id;
+                DateTime dateOfBirth = insuree.DateOfBirth;
+                int carYear = insuree.CarYear;
+                string carModel = insuree.CarModel;
+                string carMake = insuree.CarMake;
+                bool dUI = insuree.DUI;
+                int speedingTicket = insuree.SpeedingTickets;
+                bool fullCoverage = insuree.CoverageType;
+                decimal quote = insuree.Quote;
+
+                //start quote calculation
+                decimal preQuote = 50.00m;
+
+                // Calculate amount to add to quote based on age
+                int age = 0;
+                age = DateTime.Now.Year - dateOfBirth.Year;
+                if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
+                    age = age - 1;
+
+                if (age < 18)
+                    preQuote += 100.00m;
+                if (age < 25 && age > 18)
+                    preQuote += 25.00m;
+                if (age > 100)
+                    preQuote += 25.00m;
+
+                // Calculate amount to add based on CarYear
+                if (carYear < 2000)
+                    preQuote += 25.00m;
+                if (carYear > 2015)
+                    preQuote += 25.00m;
+
+                // Add more money if it's a Porsche
+                if (carMake == "Porsche")
+                    preQuote += 25.00m;
+
+                // And even more money if it's a 911 Carrera
+                if (carModel == "911 Carrera")
+                    preQuote += 25.00m;
+
+                // for each ticket they have, add $25
+                int ticketTotal = speedingTicket * 25;
+                preQuote += ticketTotal;
+
+                // add 25% to total if they've had a DUI
+                if (dUI == true)
+                {
+                    decimal duiAnswer = preQuote * .25m;
+                    preQuote += duiAnswer;
+                }
+
+                // add 50% to toal if they want Full Coverage
+                if (fullCoverage == true)
+                {
+                    decimal covAnswer = preQuote * .5m;
+                    preQuote += covAnswer;
+                }
+
+                insuree.Quote = preQuote;
+                db.SaveChanges();
+
                 return View("Success");
             }
 
@@ -121,67 +185,69 @@ namespace CarInsurance.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Quote
-        public ActionResult GetQuote(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Insuree insuree = db.Insurees.Find(id);
-            if (insuree == null)
-            {
-                return HttpNotFound();
-            }
-            return View(insuree);
-        }
+        //// GET: Quote
+        //public ActionResult GetQuote(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Insuree insuree = db.Insurees.Find(id);
+        //    if (insuree == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(insuree);
+        //}
 
-        // POST: Quote
+        //// POST: Quote
+        ////[HttpPost]
+        ////[ValidateAntiForgeryToken]
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
+        //public ActionResult Quote([Bind(Include = "Id,DateOfBirth,CarYear,CarMake,CarModel,DUI,SpeedingTickets,CoverageType,Quote")]
+        //                            Insuree insuree, DateTime dateOfBirth, int carYear, string carMake, string carModel, bool dUI, 
+        //                            int speedingTicket, bool fullCoverage, decimal quote)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        decimal preQuote = 50.00m;
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Quote([Bind(Include = "Id,DateOfBirth,CarYear,CarMake,CarModel,DUI,SpeedingTickets,CoverageType,Quote")] Insuree insuree, DateTime dateOfBirth, int carYear, string carMake, string carModel, bool dUI, int speedingTicket, bool fullCoverage, decimal quote)
-        {
-            if (ModelState.IsValid)
-            {
-                decimal preQuote = 50.00m;
+        //        // Calculate amount to add to quote based on age
+        //        int age = 0;
+        //        age = DateTime.Now.Year - dateOfBirth.Year;
+        //        if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
+        //            age = age - 1;
 
-                // Calculate amount to add to quote based on age
-                int age = 0;
-                age = DateTime.Now.Year - dateOfBirth.Year;
-                if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
-                    age = age - 1;
+        //        if (age < 18)
+        //            preQuote += 100.00m;
+        //        if (age < 25 && age > 18)
+        //            preQuote += 25.00m;
+        //        if (age > 100)
+        //            preQuote += 25.00m;
 
-                if (age < 18)
-                    preQuote += 100.00m;
-                if (age < 25 && age > 18)
-                    preQuote += 25.00m;
-                if (age > 100)
-                    preQuote += 25.00m;
+        //        // Calculate amount to add based on CarYear
+        //        if (carYear < 2000)
+        //            preQuote += 25.00m;
+        //        if (carYear > 2015)
+        //            preQuote += 25.00m;
 
-                // Calculate amount to add based on CarYear
-                if (carYear < 2000)
-                    preQuote += 25.00m;
-                if (carYear > 2015)
-                    preQuote += 25.00m;
+        //        // Add more money if it's a Porsche
+        //        if (carMake == "Porsche")
+        //            preQuote += 25.00m;
 
-                // Add more money if it's a Porsche
-                if (carMake == "Porsche")
-                    preQuote += 25.00m;
+        //        // And even more money if it's a 911 Carrera
+        //        if (carModel == "911 Carrera")
+        //            preQuote += 25.00m;
 
-                // And even more money if it's a 911 Carrera
-                if (carModel == "911 Carrera")
-                    preQuote += 25.00m;
+        //        db.Entry(insuree).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return View("Success");
+        //    }
 
-                db.Entry(insuree).State = EntityState.Modified;
-                db.SaveChanges();
-                return View("Success");
-            }
-
-            return View();
-        }
+        //    return View();
+        //}
 
 
         protected override void Dispose(bool disposing)
